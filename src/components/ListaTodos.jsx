@@ -1,9 +1,15 @@
 import FormularioTodo from "./FormularioTodo"
 import Todo from "./Todo"
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const ListaTodos = () => {
-  const [todos, setTodos] = useState([])
+  const [todos, setTodos] = useState(
+    JSON.parse(localStorage.getItem('tareasTodo')) || []
+  )
+
+  const saveLocalTodos = (save) => {
+    localStorage.setItem('tareasTodo', JSON.stringify(save))
+  }
 
   const handleDelete = (id) => {
     const newTodos = todos.filter(todo => todo.id !== id)
@@ -36,6 +42,9 @@ const ListaTodos = () => {
     setTodos(tareasActualizadas);
   }
 
+  useEffect(() => {
+    saveLocalTodos(todos)
+  }, [todos])
 
   return (
     <div>
