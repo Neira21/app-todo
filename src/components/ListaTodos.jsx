@@ -3,6 +3,7 @@ import Todo from "./Todo"
 import { useState, useEffect } from 'react'
 
 const ListaTodos = () => {
+
   const [todos, setTodos] = useState(
     JSON.parse(localStorage.getItem('tareasTodo')) || []
   )
@@ -13,12 +14,6 @@ const ListaTodos = () => {
 
   const handleDelete = (id) => {
     const newTodos = todos.filter(todo => todo.id !== id)
-    setTodos(newTodos)
-  }
-
-  const handleEdit = (id, newTodo) =>{
-    const newTodos = todos.map(todo => todo.id === id ? {...todo, text: newTodo} : todo)
-    console.log(id, newTodo)
     setTodos(newTodos)
   }
 
@@ -42,6 +37,16 @@ const ListaTodos = () => {
     setTodos(tareasActualizadas);
   }
 
+  const updateTodo = (id, updatedText) => {
+    const updatedTodos = todos.map(todo => {
+      if (todo.id === id) {
+        todo.text = updatedText;
+      }
+      return todo;
+    });
+    setTodos(updatedTodos);
+  };
+
   useEffect(() => {
     saveLocalTodos(todos)
   }, [todos])
@@ -50,8 +55,15 @@ const ListaTodos = () => {
     <div>
       <FormularioTodo construirTodo={construirTodo} />
       <div className='Lista de tareas'>
-        {todos.map((todo, index) => (
-          <Todo todo={todo} key={index} completada={todo.completada} completarTarea={completarTarea} onDelete={handleDelete} onEdit={handleEdit} />
+        {todos.map((todo) => (
+          <Todo 
+            todo={todo} 
+            key={todo.id} 
+            completada={todo.completada} 
+            completarTarea={completarTarea} 
+            onDelete={handleDelete} 
+            updateTodo={updateTodo}
+            />
         ))}
       </div>
     </div>

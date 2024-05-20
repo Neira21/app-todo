@@ -1,43 +1,53 @@
 import { useState } from "react"
 import PropTypes from 'prop-types'
 
-const Todo = ({todo, onDelete, onEdit, completada, completarTarea }) => {
+
+const Todo = ({todo, onDelete, completada, completarTarea, updateTodo }) => {
   
   Todo.propTypes = {
     todo: PropTypes.shape({
       completada: PropTypes.bool.isRequired,
       text: PropTypes.string.isRequired,
       id: PropTypes.number.isRequired,
-    }).isRequired,
+    }),
     onDelete: PropTypes.func.isRequired,
-    onEdit: PropTypes.func.isRequired,
+    onEdit: PropTypes.func,
     completarTarea: PropTypes.func.isRequired,
     completada: PropTypes.bool.isRequired,
+    updateTodo: PropTypes.func,
   };
 
-  const [edit , setEdit] = useState(false)
   const [newTodo, setNewTodo] = useState(todo.text)
+  const [edit, setEdit] = useState(false)
 
   const handleChangeInput = (e) =>{
     setNewTodo(e.target.value)
   }
 
-  const handleClickUptate = () => {
-    onEdit(todo.id, newTodo) 
-    setEdit(false)
-  }
+  const handleEdit = () => {
+    console.log("nuevo", todo)
+    setEdit(true);
+  };
+
+  const handleSave = (e) => {
+    e.preventDefault();
+    updateTodo(todo.id, newTodo);
+    setEdit(false);
+  };
+
 
   return (
     <div className="todoContainer">
       {edit 
         ?
           <div>
-            <form>
-              <input type="text" value={newTodo} 
+            <form onSubmit={handleSave}>
+              <input type="text" 
+                value={newTodo} 
                 className="formularioTodo-input" 
-                onChange={handleChangeInput} 
+                onChange={handleChangeInput}
                 /> 
-              <button className="boton boton-editar" onClick={()=>handleClickUptate() }>Guardar</button>
+              <button className="boton boton-editar">Guardar</button>
             </form>
             
           </div>
@@ -49,7 +59,7 @@ const Todo = ({todo, onDelete, onEdit, completada, completarTarea }) => {
               <p>{todo.text} {!todo.completada && '👈' }</p>
             </div>
             <div className="botones">
-              <button className="boton boton-editar" onClick={()=>setEdit(true)} > Editar </button>
+              <button className="boton boton-editar" onClick={handleEdit}> Editar </button>
               <button className="boton boton-borrar" onClick={()=>onDelete(todo.id)} > Borrar </button>
             </div>
           </div>
