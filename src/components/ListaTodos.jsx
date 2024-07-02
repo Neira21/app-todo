@@ -4,6 +4,10 @@ import { useState, useEffect } from 'react'
 
 const ListaTodos = () => {
 
+  const metodo = () => {
+    console.log("Hola")
+  }
+
   const [todos, setTodos] = useState(
     JSON.parse(localStorage.getItem('tareasTodo')) || []
   )
