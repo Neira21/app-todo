@@ -17,6 +17,10 @@ const Todo = ({todo, onDelete, completada, completarTarea, updateTodo }) => {
     updateTodo: PropTypes.func,
   };
 
+
+
+  
+
   const [newTodo, setNewTodo] = useState(todo.text)
   const [edit, setEdit] = useState(false)
 
